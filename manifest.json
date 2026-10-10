@@ -1,0 +1,14 @@
+{
+  "name": "Daleel: Quran, Hadith and Scholars",
+  "short_name": "Daleel",
+  "description": "Search the Quran, hadith and scholars' views, with every result cited.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F4F6F3",
+  "theme_color": "#10243A",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}

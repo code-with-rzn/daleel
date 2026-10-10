@@ -1,0 +1,19 @@
+# Secrets and keys: never commit these
+.env
+.env.*
+*.keystore
+*.jks
+android.keystore
+signing-key*
+.dev.vars
+
+# Tools and system files
+node_modules/
+.wrangler/
+.DS_Store
+Thumbs.db
+
+# Android build output
+*.apk
+*.aab
+app-release*
