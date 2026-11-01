@@ -12,6 +12,7 @@ Daleel is a **search-and-cite tool, not a fatwa service**. It shows what the tex
 - **Translate page:** switches the interface, the Quran and hadith text, and the AI explanation to another language without searching again.
 - **Questions in any of the six languages:** the language is detected from the script.
 - **AI explanation (optional):** a short explanation written only from the passages found, with clickable citations (Q1, H2 and so on). Citations that do not match a passage on the page are removed.
+- **Qibla finder:** a second tab that works out the direction of the Kaaba from your location and shows it on a live compass. It runs on the device, uses no API, and your location is not sent anywhere. Phone compasses can be off by several degrees, and magnetic declination is not yet corrected.
 - **Installable and offline-friendly:** works as a PWA, and cached data works offline after the first download.
 
 ## Files

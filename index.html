@@ -8,6 +8,11 @@
 <meta name="theme-color" content="#10243A">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Daleel">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Newsreader:wght@400;600&family=Noto+Nastaliq+Urdu&family=Noto+Sans+Devanagari&family=Noto+Sans+Telugu&display=swap" rel="stylesheet">
@@ -93,6 +98,28 @@ section>h2 .n{font-size:16px;font-weight:400;color:var(--muted)}
 .scholar span{font-size:14px;color:var(--muted)}
 .empty{color:var(--muted);padding:6px 0;margin:0}
 footer{border-top:1px solid var(--line);padding:22px 0 40px;font-size:14px;color:var(--muted)}
+
+.nav{background:#0B1B2D;border-top:1px solid #243B54}
+.nav .wrap{display:flex;gap:4px}
+.nav button{background:none;border:0;border-bottom:3px solid transparent;color:#C5D0DC;padding:12px 18px;font-size:17px}
+.nav button[aria-selected=true]{color:#fff;border-bottom-color:var(--gold);font-weight:600}
+.qrow{margin:8px 0 14px}
+.qrow .go{height:48px}
+.compass{max-width:340px;margin:12px auto 0}
+.compass svg{width:100%;height:auto;display:block}
+.compass .ring{fill:#fff;stroke:var(--ink);stroke-width:3}
+.compass.on .ring{stroke:var(--green);stroke-width:7}
+.compass .dl{font:600 16px var(--serif);text-anchor:middle;dominant-baseline:middle;fill:var(--ink)}
+.compass .dl.n{fill:#A33}
+.qface{text-align:center;font-size:20px;font-weight:600;margin:10px 0 0;min-height:1.6em}
+.qface.ok{color:var(--green)}
+.qinfo{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;max-width:420px;margin:16px auto}
+.qinfo dt{color:var(--muted)}
+.qinfo dd{margin:0;font-weight:600}
+.qmanual{margin-top:22px;font-size:16px}
+.qmanual summary{cursor:pointer;width:max-content}
+.qmanual .setrow input{font:inherit;font-size:16px;width:9em;padding:6px 8px;border:1px solid var(--line);border-radius:5px}
+.qmanual button{padding:7px 16px;border:1px solid var(--ink);background:var(--card);border-radius:5px}
 @media (max-width:520px){body{font-size:17px}.go{padding:0 14px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 </style>
@@ -106,7 +133,7 @@ footer{border-top:1px solid var(--line);padding:22px 0 40px;font-size:14px;color
     </div>
     <div class="brand"><span class="ar" lang="ar" dir="rtl">دليل</span><span class="en">Daleel</span></div>
     <p class="tag ui" id="tag"></p>
-    <form id="f" role="search">
+    <div id="searchtools"><form id="f" role="search">
       <input type="search" id="q" autocomplete="off" enterkeyhint="search">
       <button class="go ui" id="go" type="submit"></button>
     </form>
@@ -121,17 +148,53 @@ footer{border-top:1px solid var(--line);padding:22px 0 40px;font-size:14px;color
         <label><input type="checkbox" id="aisave"><span id="savelabel"></span></label>
       </div>
       <p class="hint" id="keyhint"></p>
-    </details>
+    </details></div>
   </div>
 </header>
+<nav class="nav" aria-label="Sections"><div class="wrap"><button type="button" class="ui" id="nvs" aria-selected="true"></button><button type="button" class="ui" id="nvq" aria-selected="false"></button></div></nav>
 
-<main class="wrap">
+<main class="wrap"><div id="vsearch">
   <p class="notice ui" id="disc"></p>
   <p class="status ui" id="status" aria-live="polite"></p>
   <section id="sai" hidden><div class="ai"><div class="aihead ui"><b id="aititle"></b><span id="ainote"></span></div><div class="aibody tr" id="aibody"></div></div></section>
   <section id="sq" hidden><h2 class="ui"><span id="hq"></span><span class="n" id="nq"></span></h2><div id="rq"></div></section>
   <section id="sh" hidden><h2 class="ui"><span id="hh"></span><span class="n" id="nh"></span></h2><p class="sub ui" id="subh"></p><div id="rh"></div></section>
   <section id="ss" hidden><h2 class="ui" id="hs"></h2><p class="sub ui" id="subs"></p><div class="scholar" id="rs"></div></section>
+</div>
+  <div id="vqibla" hidden>
+    <h2 class="ui" id="qt" style="font-size:24px;margin:8px 0 4px"></h2>
+    <p class="sub ui" id="qintro"></p>
+    <div class="qrow"><button type="button" class="go ui" id="qstart"></button></div>
+    <p class="status ui" id="qstatus" aria-live="polite"></p>
+    <div class="compass" id="compass" hidden>
+      <svg viewBox="-120 -125 240 245" role="img" aria-label="Qibla compass">
+        <g id="dial">
+          <circle class="ring" r="96"/>
+          <g id="ticks"></g>
+          <text class="dl n" x="0" y="-62">N</text><text class="dl" x="62" y="0">E</text>
+          <text class="dl" x="0" y="62">S</text><text class="dl" x="-62" y="0">W</text>
+          <g id="kaaba"><rect x="-10" y="-94" width="20" height="20" rx="2" fill="#10243A"/><rect x="-10" y="-88" width="20" height="4" fill="#A87B1E"/></g>
+        </g>
+        <polygon points="0,-99 -9,-116 9,-116" fill="#A87B1E"/>
+        <circle r="5" fill="#10243A"/>
+      </svg>
+    </div>
+    <p class="qface ui" id="qface" aria-live="polite"></p>
+    <dl class="qinfo ui" id="qinfo" hidden>
+      <dt id="qlb1"></dt><dd id="qv1"></dd>
+      <dt id="qlb2"></dt><dd id="qv2"></dd>
+      <dt id="qlb3"></dt><dd id="qv3"></dd>
+    </dl>
+    <details class="qmanual ui">
+      <summary id="qmsum"></summary>
+      <div class="setrow">
+        <label><span id="qlat"></span><input type="number" id="qlatv" step="any" min="-90" max="90" placeholder="43.0"></label>
+        <label><span id="qlon"></span><input type="number" id="qlonv" step="any" min="-180" max="180" placeholder="-87.9"></label>
+        <button type="button" id="qcalc"></button>
+      </div>
+    </details>
+    <p class="notice ui" id="qwarn" style="margin-top:24px"></p>
+  </div>
 </main>
 
 <footer>
@@ -350,7 +413,7 @@ function applyStrings() {
   $('#hq').textContent = t('quran'); $('#hh').textContent = t('hadith'); $('#hs').textContent = t('scholars');
   $('#subh').textContent = t('subh'); $('#subs').textContent = t('subs');
   $('#aititle').textContent = t('aiTitle'); $('#ainote').textContent = t('aiNote');
-  $('#plang').value = lang; renderBooks();
+  applyQiblaStrings(); $('#plang').value = lang; renderBooks();
 }
 async function fillTranslations() {
   const sel = $('#tred'); sel.textContent = '';
@@ -598,6 +661,140 @@ function citeLink(id) {
   };
   return a;
 }
+
+
+/* ---------- Qibla finder ---------- */
+Object.assign(UI.en, {
+  navSearch:'Search', navQibla:'Qibla', qTitle:'Qibla finder',
+  qIntro:'Hold your phone flat, away from metal and magnets. Turn until the Kaaba marker points to the top.',
+  qStart:'Find Qibla', qBearing:'Qibla direction', qDistance:'Distance to the Kaaba', qLocation:'Your location',
+  qFacing:'You are facing the Qibla', qOff:'Turn until the marker is at the top. Off by',
+  qLocating:'Finding your location…', qLocDenied:'Location was not allowed. Enter your coordinates below instead.',
+  qNoSensor:'No compass sensor found. Face %d° clockwise from north, using a compass or a map app.',
+  qManual:'Enter coordinates instead', qLat:'Latitude', qLon:'Longitude', qCalc:'Calculate', qBadCoords:'Enter a latitude from -90 to 90 and a longitude from -180 to 180.',
+  qAtKaaba:'You are at the Kaaba.', qFromNorth:'from north, clockwise',
+  qWarn:'Phone compasses can be off by several degrees, and are least accurate near metal, cars and speakers. Your location stays on your device. For prayer, check against your local mosque or a trusted source if you can.'
+});
+Object.assign(UI.ur, {navSearch:'تلاش', navQibla:'قبلہ', qTitle:'قبلہ رخ', qStart:'قبلہ تلاش کریں', qBearing:'قبلہ کی سمت', qDistance:'کعبہ تک فاصلہ', qFacing:'آپ کا رخ قبلہ کی طرف ہے',
+  qIntro:'فون کو سیدھا رکھیں، دھات اور مقناطیس سے دور۔ اس وقت تک گھومیں جب تک کعبہ کا نشان اوپر نہ آ جائے۔'});
+Object.assign(UI.te, {navSearch:'వెతుకు', navQibla:'ఖిబ్లా', qTitle:'ఖిబ్లా దిశ', qStart:'ఖిబ్లా కనుగొనండి', qBearing:'ఖిబ్లా దిశ', qDistance:'కాబా వరకు దూరం', qFacing:'మీరు ఖిబ్లా వైపు ఉన్నారు',
+  qIntro:'ఫోన్‌ను చదునుగా పట్టుకోండి, లోహం, అయస్కాంతాల నుండి దూరంగా. కాబా గుర్తు పైకి చూపే వరకు తిరగండి.'});
+Object.assign(UI.hi, {navSearch:'खोजें', navQibla:'क़िबला', qTitle:'क़िबला खोजक', qStart:'क़िबला खोजें', qBearing:'क़िबला की दिशा', qDistance:'काबा तक दूरी', qFacing:'आप क़िबला की ओर हैं',
+  qIntro:'फ़ोन को सीधा रखें, धातु और चुंबक से दूर। तब तक घूमें जब तक काबा का निशान ऊपर न आ जाए।'});
+Object.assign(UI.ar, {navSearch:'بحث', navQibla:'القبلة', qTitle:'تحديد القبلة', qStart:'اعثر على القبلة', qBearing:'اتجاه القبلة', qDistance:'المسافة إلى الكعبة', qFacing:'أنت متجه نحو القبلة',
+  qIntro:'امسك هاتفك أفقياً بعيداً عن المعادن والمغناطيس. استدر حتى تشير علامة الكعبة إلى الأعلى.'});
+Object.assign(UI.es, {navSearch:'Buscar', navQibla:'Qibla', qTitle:'Buscador de la Qibla', qStart:'Encontrar la Qibla', qBearing:'Dirección de la Qibla', qDistance:'Distancia a la Kaaba', qFacing:'Estás mirando hacia la Qibla',
+  qIntro:'Sostén el teléfono en horizontal, lejos de metales e imanes. Gira hasta que la marca de la Kaaba apunte hacia arriba.'});
+
+/*QIBLA-MATH*/
+const KAABA = {lat: 21.422487, lon: 39.826206};
+function qiblaFrom(lat, lon) {
+  const r = Math.PI / 180, p1 = lat * r, p2 = KAABA.lat * r, dl = (KAABA.lon - lon) * r;
+  const y = Math.sin(dl) * Math.cos(p2);
+  const x = Math.cos(p1) * Math.sin(p2) - Math.sin(p1) * Math.cos(p2) * Math.cos(dl);
+  const bearing = (Math.atan2(y, x) / r + 360) % 360;
+  const a = Math.sin((p2 - p1) / 2) ** 2 + Math.cos(p1) * Math.cos(p2) * Math.sin(dl / 2) ** 2;
+  const dist = 2 * 6371 * Math.asin(Math.min(1, Math.sqrt(a)));
+  return {bearing, dist};
+}
+/*END-QIBLA-MATH*/
+
+const qs = {bearing: null, smooth: null, listening: false, gotHeading: false, timer: null};
+const NS = 'http://www.w3.org/2000/svg';
+(function drawTicks() {
+  const g = $('#ticks');
+  for (let a = 0; a < 360; a += 30) {
+    const l = document.createElementNS(NS, 'line');
+    l.setAttribute('x1', 0); l.setAttribute('x2', 0); l.setAttribute('y1', -96); l.setAttribute('y2', a % 90 ? -88 : -84);
+    l.setAttribute('stroke', '#10243A'); l.setAttribute('stroke-width', a % 90 ? 2 : 3);
+    l.setAttribute('transform', 'rotate(' + a + ')'); g.append(l);
+  }
+})();
+
+function applyQiblaStrings() {
+  $('#nvs').textContent = t('navSearch'); $('#nvq').textContent = t('navQibla');
+  $('#qt').textContent = t('qTitle'); $('#qintro').textContent = t('qIntro'); $('#qstart').textContent = t('qStart');
+  $('#qlb1').textContent = t('qBearing'); $('#qlb2').textContent = t('qDistance'); $('#qlb3').textContent = t('qLocation');
+  $('#qmsum').textContent = t('qManual'); $('#qlat').textContent = t('qLat') + ': '; $('#qlon').textContent = t('qLon') + ': ';
+  $('#qcalc').textContent = t('qCalc'); $('#qwarn').textContent = t('qWarn');
+  if (qs.bearing != null) showQiblaInfo();
+}
+function showView(v) {
+  const q = v === 'qibla';
+  $('#vsearch').hidden = q; $('#vqibla').hidden = !q; $('#searchtools').hidden = q;
+  $('#nvs').setAttribute('aria-selected', String(!q)); $('#nvq').setAttribute('aria-selected', String(q));
+  if (!q) stopCompass();
+  window.scrollTo({top: 0});
+}
+$('#nvs').onclick = () => showView('search');
+$('#nvq').onclick = () => showView('qibla');
+
+let qLoc = null;
+function showQiblaInfo() {
+  const {bearing, dist} = qiblaFrom(qLoc.lat, qLoc.lon);
+  qs.bearing = bearing;
+  $('#kaaba').setAttribute('transform', 'rotate(' + bearing.toFixed(1) + ')');
+  $('#qv1').textContent = bearing.toFixed(1) + '° ' + t('qFromNorth');
+  $('#qv2').textContent = dist < 0.2 ? t('qAtKaaba') : Math.round(dist).toLocaleString() + ' km';
+  $('#qv3').textContent = qLoc.lat.toFixed(3) + ', ' + qLoc.lon.toFixed(3);
+  $('#qinfo').hidden = false; $('#compass').hidden = false;
+}
+function setLocation(lat, lon) {
+  qLoc = {lat, lon}; showQiblaInfo();
+  if (!qs.gotHeading) {
+    $('#dial').setAttribute('transform', 'rotate(0)');
+    $('#qface').textContent = ''; $('#qface').classList.remove('ok');
+  }
+}
+function onOrient(e) {
+  let hd = null;
+  if (typeof e.webkitCompassHeading === 'number') hd = e.webkitCompassHeading;      // iPhone
+  else if ((e.absolute === true || e.type === 'deviceorientationabsolute') && e.alpha != null) hd = (360 - e.alpha) % 360;   // Android
+  if (hd == null || qs.bearing == null) return;
+  qs.gotHeading = true; clearTimeout(qs.timer);
+  if (qs.smooth == null) qs.smooth = hd;
+  else { const d = ((hd - qs.smooth + 540) % 360) - 180; qs.smooth = (qs.smooth + d * 0.25 + 360) % 360; }
+  $('#dial').setAttribute('transform', 'rotate(' + (-qs.smooth).toFixed(1) + ')');
+  const off = Math.abs(((qs.bearing - qs.smooth + 540) % 360) - 180), ok = off <= 4;
+  $('#compass').classList.toggle('on', ok);
+  const f = $('#qface'); f.classList.toggle('ok', ok);
+  f.textContent = ok ? t('qFacing') : t('qOff') + ' ' + Math.round(off) + '°';
+  $('#qstatus').textContent = '';
+}
+function startListening() {
+  if (qs.listening) return;
+  qs.listening = true; qs.gotHeading = false; qs.smooth = null;
+  window.addEventListener('deviceorientationabsolute', onOrient, true);
+  window.addEventListener('deviceorientation', onOrient, true);
+  qs.timer = setTimeout(() => {
+    if (!qs.gotHeading && qs.bearing != null) $('#qstatus').textContent = t('qNoSensor').replace('%d', Math.round(qs.bearing));
+  }, 3000);
+}
+function stopCompass() {
+  window.removeEventListener('deviceorientationabsolute', onOrient, true);
+  window.removeEventListener('deviceorientation', onOrient, true);
+  qs.listening = false; clearTimeout(qs.timer);
+}
+async function startQibla() {
+  // iPhone needs this permission request first, directly inside the tap
+  try {
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') await DeviceOrientationEvent.requestPermission();
+  } catch (e) { console.error(e); }
+  $('#qstatus').textContent = t('qLocating');
+  if (!navigator.geolocation) { $('#qstatus').textContent = t('qLocDenied'); $('.qmanual').open = true; return; }
+  navigator.geolocation.getCurrentPosition(pos => {
+    $('#qstatus').textContent = '';
+    setLocation(pos.coords.latitude, pos.coords.longitude); startListening();
+  }, err => {
+    console.error(err); $('#qstatus').textContent = t('qLocDenied'); $('.qmanual').open = true;
+  }, {enableHighAccuracy: false, timeout: 15000, maximumAge: 600000});
+}
+$('#qstart').onclick = startQibla;
+$('#qcalc').onclick = () => {
+  const lat = parseFloat($('#qlatv').value), lon = parseFloat($('#qlonv').value);
+  if (!(lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180)) { $('#qstatus').textContent = t('qBadCoords'); return; }
+  $('#qstatus').textContent = ''; setLocation(lat, lon); startListening();
+};
 
 /* ---------- Start ---------- */
 $('#f').addEventListener('submit', e => { e.preventDefault(); const q = $('#q').value.trim(); if (q) search(q); });
